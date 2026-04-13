@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="600" viewBox="0 0 960 600">
+<rect width="100%" height="100%" fill="#fffdf7" />
+<text x="90" y="42" font-size="28" font-family="Helvetica, Arial, sans-serif" fill="#111827">BER/FER vs Block Length N</text>
+<text x="90" y="68" font-size="15" font-family="Helvetica, Arial, sans-serif" fill="#4b5563">BSC p=0.05, trials=2000, target code rate=0.500</text>
+<line x1="90" y1="520" x2="920" y2="520" stroke="#111827" stroke-width="2"/>
+<line x1="90" y1="95" x2="90" y2="520" stroke="#111827" stroke-width="2"/>
+<line x1="90" y1="520.00" x2="920" y2="520.00" stroke="#e5e7eb" stroke-width="1"/>
+<text x="78" y="525.00" text-anchor="end" font-size="13" font-family="Helvetica, Arial, sans-serif" fill="#374151">0.000</text>
+<line x1="90" y1="435.00" x2="920" y2="435.00" stroke="#e5e7eb" stroke-width="1"/>
+<text x="78" y="440.00" text-anchor="end" font-size="13" font-family="Helvetica, Arial, sans-serif" fill="#374151">0.040</text>
+<line x1="90" y1="350.00" x2="920" y2="350.00" stroke="#e5e7eb" stroke-width="1"/>
+<text x="78" y="355.00" text-anchor="end" font-size="13" font-family="Helvetica, Arial, sans-serif" fill="#374151">0.080</text>
+<line x1="90" y1="265.00" x2="920" y2="265.00" stroke="#e5e7eb" stroke-width="1"/>
+<text x="78" y="270.00" text-anchor="end" font-size="13" font-family="Helvetica, Arial, sans-serif" fill="#374151">0.120</text>
+<line x1="90" y1="180.00" x2="920" y2="180.00" stroke="#e5e7eb" stroke-width="1"/>
+<text x="78" y="185.00" text-anchor="end" font-size="13" font-family="Helvetica, Arial, sans-serif" fill="#374151">0.160</text>
+<line x1="90" y1="95.00" x2="920" y2="95.00" stroke="#e5e7eb" stroke-width="1"/>
+<text x="78" y="100.00" text-anchor="end" font-size="13" font-family="Helvetica, Arial, sans-serif" fill="#374151">0.200</text>
+<line x1="90.00" y1="520" x2="90.00" y2="526" stroke="#111827" stroke-width="1.5"/>
+<text x="90.00" y="548" text-anchor="middle" font-size="13" font-family="Helvetica, Arial, sans-serif" fill="#374151">8</text>
+<line x1="297.50" y1="520" x2="297.50" y2="526" stroke="#111827" stroke-width="1.5"/>
+<text x="297.50" y="548" text-anchor="middle" font-size="13" font-family="Helvetica, Arial, sans-serif" fill="#374151">16</text>
+<line x1="505.00" y1="520" x2="505.00" y2="526" stroke="#111827" stroke-width="1.5"/>
+<text x="505.00" y="548" text-anchor="middle" font-size="13" font-family="Helvetica, Arial, sans-serif" fill="#374151">32</text>
+<line x1="712.50" y1="520" x2="712.50" y2="526" stroke="#111827" stroke-width="1.5"/>
+<text x="712.50" y="548" text-anchor="middle" font-size="13" font-family="Helvetica, Arial, sans-serif" fill="#374151">64</text>
+<line x1="920.00" y1="520" x2="920.00" y2="526" stroke="#111827" stroke-width="1.5"/>
+<text x="920.00" y="548" text-anchor="middle" font-size="13" font-family="Helvetica, Arial, sans-serif" fill="#374151">128</text>
+<path d="M 90.00 477.23 L 297.50 424.77 L 505.00 467.80 L 712.50 481.45 L 920.00 482.15" fill="none" stroke="#0f766e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M 90.00 440.31 L 297.50 290.50 L 505.00 356.38 L 712.50 362.75 L 920.00 322.38" fill="none" stroke="#dc2626" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="90.00" cy="477.23" r="5" fill="#0f766e"/>
+<circle cx="90.00" cy="440.31" r="5" fill="#dc2626"/>
+<circle cx="297.50" cy="424.77" r="5" fill="#0f766e"/>
+<circle cx="297.50" cy="290.50" r="5" fill="#dc2626"/>
+<circle cx="505.00" cy="467.80" r="5" fill="#0f766e"/>
+<circle cx="505.00" cy="356.38" r="5" fill="#dc2626"/>
+<circle cx="712.50" cy="481.45" r="5" fill="#0f766e"/>
+<circle cx="712.50" cy="362.75" r="5" fill="#dc2626"/>
+<circle cx="920.00" cy="482.15" r="5" fill="#0f766e"/>
+<circle cx="920.00" cy="322.38" r="5" fill="#dc2626"/>
+<line x1="760" y1="48" x2="792" y2="48" stroke="#0f766e" stroke-width="4"/>
+<text x="802" y="53" font-size="14" font-family="Helvetica, Arial, sans-serif" fill="#111827">BER</text>
+<line x1="760" y1="74" x2="792" y2="74" stroke="#dc2626" stroke-width="4"/>
+<text x="802" y="79" font-size="14" font-family="Helvetica, Arial, sans-serif" fill="#111827">FER</text>
+<text x="505.00" y="576" text-anchor="middle" font-size="16" font-family="Helvetica, Arial, sans-serif" fill="#111827">Block length N (log2 spacing)</text>
+<text transform="translate(24 307.50) rotate(-90)" text-anchor="middle" font-size="16" font-family="Helvetica, Arial, sans-serif" fill="#111827">Error rate</text>
+</svg>
