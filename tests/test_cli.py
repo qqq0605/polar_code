@@ -11,6 +11,39 @@ SRC_DIR = PROJECT_ROOT / "src"
 
 
 class PolarCodeCliTestCase(unittest.TestCase):
+    def test_find_message_length_zero_noise_returns_full_block(self) -> None:
+        env = os.environ.copy()
+        existing_path = env.get("PYTHONPATH", "")
+        env["PYTHONPATH"] = str(SRC_DIR) if not existing_path else f"{SRC_DIR}{os.pathsep}{existing_path}"
+
+        search_command = [
+            sys.executable,
+            "-m",
+            "polar_code",
+            "find-message-length",
+            "--block-length",
+            "8",
+            "--crossover-probability",
+            "0.0",
+            "--trials",
+            "5",
+            "--target-frame-error-rate",
+            "0.0",
+            "--seed",
+            "7",
+        ]
+        search_result = subprocess.run(
+            search_command,
+            cwd=PROJECT_ROOT,
+            env=env,
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+
+        self.assertIn("best_message_length=8", search_result.stdout)
+        self.assertIn("next_fail_message_length=None", search_result.stdout)
+
     def test_encode_then_decode_round_trip(self) -> None:
         env = os.environ.copy()
         existing_path = env.get("PYTHONPATH", "")

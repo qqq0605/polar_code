@@ -92,6 +92,19 @@ PYTHONPATH=src python3 -m polar_code plot \
 - `outputs/ber_fer_vs_code_rate.svg`
 - `outputs/ber_fer_vs_code_rate.csv`
 
+### 5. 搜尋滿足 FER 條件的最大 message length
+
+```bash
+PYTHONPATH=src python3 -m polar_code find-message-length \
+  --block-length 65536 \
+  --crossover-probability 0.01 \
+  --trials 100 \
+  --target-frame-error-rate 0.01 \
+  --seed 20260416
+```
+
+這個指令會自動找出最大的 `K`，使得模擬得到的 frame error rate 不超過指定門檻。
+
 ## Python API 範例
 
 ```python
@@ -111,8 +124,9 @@ print(decoded.estimated_message)
 ## 設計說明
 
 - Construction:
-  以 BSC 的 `Z(W) = 2 * sqrt(p * (1 - p))` 為起點，使用 polar recursion
-  `Z^- = 2Z - Z^2`、`Z^+ = Z^2` 建立長度 `N` 的可靠度序列。
+  預設使用 Monte Carlo Bhattacharyya construction。對 all-zero transmission
+  取樣，沿著 SC LLR recursion 估計每個 synthetic bit-channel 的
+  `Z_i = E[exp(-L_i / 2)]`，再挑選 `K` 個最小的通道作為 information bits。
 - Encoder:
   使用 Arikan 的 recursive polar transform。
 - Decoder:

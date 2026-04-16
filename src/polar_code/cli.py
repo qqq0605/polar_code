@@ -8,7 +8,9 @@ import sys
 
 from .channel import bsc_transmit
 from .codec import PolarCode
+from .construction import DEFAULT_CONSTRUCTION_SAMPLES, DEFAULT_CONSTRUCTION_SEED
 from .plots import generate_default_plots
+from .search import find_maximum_message_length
 from .utils import bits_from_text, bits_to_text
 
 
@@ -19,15 +21,16 @@ def build_parser() -> argparse.ArgumentParser:
     )
     subparsers = parser.add_subparsers(dest="command", required=True)
 
-    common = argparse.ArgumentParser(add_help=False)
-    common.add_argument("--block-length", type=int, required=True, help="Code length N = 2^k.")
-    common.add_argument("--message-length", type=int, required=True, help="Message length K.")
-    common.add_argument(
+    channel_common = argparse.ArgumentParser(add_help=False)
+    channel_common.add_argument("--block-length", type=int, required=True, help="Code length N = 2^k.")
+    channel_common.add_argument(
         "--crossover-probability",
         type=float,
         required=True,
         help="BSC crossover probability p.",
     )
+    common = argparse.ArgumentParser(add_help=False, parents=[channel_common])
+    common.add_argument("--message-length", type=int, required=True, help="Message length K.")
 
     encode_parser = subparsers.add_parser("encode", parents=[common], help="Encode a message.")
     encode_parser.add_argument("--message", required=True, help="Binary message, e.g. 1011.")
@@ -50,6 +53,44 @@ def build_parser() -> argparse.ArgumentParser:
     )
     transmit_parser.add_argument("--message", required=True, help="Binary message, e.g. 1011.")
     transmit_parser.add_argument("--seed", type=int, default=None, help="Optional RNG seed.")
+
+    search_parser = subparsers.add_parser(
+        "find-message-length",
+        parents=[channel_common],
+        help="Find the largest K that satisfies an FER target.",
+    )
+    search_parser.add_argument("--trials", type=int, required=True, help="Number of trials.")
+    search_parser.add_argument(
+        "--target-frame-error-rate",
+        type=float,
+        required=True,
+        help="FER target used to accept or reject a message length.",
+    )
+    search_parser.add_argument("--seed", type=int, default=None, help="Optional simulation RNG seed.")
+    search_parser.add_argument(
+        "--construction-samples",
+        type=int,
+        default=DEFAULT_CONSTRUCTION_SAMPLES,
+        help="Monte Carlo samples used by the sampled-Bhattacharyya construction.",
+    )
+    search_parser.add_argument(
+        "--construction-seed",
+        type=int,
+        default=DEFAULT_CONSTRUCTION_SEED,
+        help="Seed used by the sampled-Bhattacharyya construction.",
+    )
+    search_parser.add_argument(
+        "--lower-bound",
+        type=int,
+        default=None,
+        help="Optional lower hint for the binary search interval.",
+    )
+    search_parser.add_argument(
+        "--upper-bound",
+        type=int,
+        default=None,
+        help="Optional upper hint for the binary search interval.",
+    )
 
     plot_parser = subparsers.add_parser(
         "plot",
@@ -126,6 +167,43 @@ def main(argv: list[str] | None = None) -> int:
             )
             for name, path in outputs.items():
                 print(f"{name}={path}")
+            return 0
+
+        if args.command == "find-message-length":
+            result = find_maximum_message_length(
+                block_length=args.block_length,
+                crossover_probability=args.crossover_probability,
+                trials=args.trials,
+                target_frame_error_rate=args.target_frame_error_rate,
+                seed=args.seed,
+                construction_samples=args.construction_samples,
+                construction_seed=args.construction_seed,
+                lower_bound=args.lower_bound,
+                upper_bound=args.upper_bound,
+            )
+            print(f"trials={result.trials}")
+            print(f"target_frame_error_rate={result.target_frame_error_rate:.8f}")
+            print(f"max_frame_errors={result.max_frame_errors}")
+            print(f"construction_samples={result.construction_samples}")
+            print(f"construction_seed={result.construction_seed}")
+            if result.best_pass is None:
+                print("best_message_length=0")
+                print("best_code_rate=0.00000000")
+            else:
+                print(f"best_message_length={result.best_pass.message_length}")
+                print(f"best_code_rate={result.best_pass.message_length / result.block_length:.8f}")
+                print(f"best_checked_trials={result.best_pass.checked_trials}")
+                print(f"best_bit_errors={result.best_pass.bit_errors}")
+                print(f"best_frame_errors={result.best_pass.frame_errors}")
+                print(f"best_frame_error_rate={result.best_pass.frame_error_rate:.8f}")
+            if result.next_fail is None:
+                print("next_fail_message_length=None")
+            else:
+                print(f"next_fail_message_length={result.next_fail.message_length}")
+                print(f"next_fail_checked_trials={result.next_fail.checked_trials}")
+                print(f"next_fail_bit_errors={result.next_fail.bit_errors}")
+                print(f"next_fail_frame_errors={result.next_fail.frame_errors}")
+                print(f"next_fail_frame_error_rate={result.next_fail.frame_error_rate:.8f}")
             return 0
 
         codec = PolarCode(

@@ -8,7 +8,12 @@ import random
 from typing import Sequence
 
 from .channel import bsc_llr, bsc_transmit
-from .construction import bhattacharyya_bounds_bsc, select_information_bits
+from .construction import (
+    DEFAULT_CONSTRUCTION_SAMPLES,
+    DEFAULT_CONSTRUCTION_SEED,
+    sampled_bhattacharyya_parameters_bsc,
+    select_information_bits,
+)
 from .utils import (
     ensure_binary_vector,
     validate_block_length,
@@ -34,13 +39,15 @@ class SimulationResult:
 
 
 class PolarCode:
-    """Polar code over a BSC with Bhattacharyya construction and SC decoding."""
+    """Polar code over a BSC with Monte Carlo Bhattacharyya construction and SC decoding."""
 
     def __init__(
         self,
         block_length: int,
         message_length: int,
         crossover_probability: float,
+        construction_samples: int = DEFAULT_CONSTRUCTION_SAMPLES,
+        construction_seed: int | None = DEFAULT_CONSTRUCTION_SEED,
     ) -> None:
         validate_block_length(block_length)
         validate_message_length(message_length, block_length)
@@ -49,13 +56,22 @@ class PolarCode:
         self.block_length = block_length
         self.message_length = message_length
         self.crossover_probability = crossover_probability
+        self.construction_samples = construction_samples
+        self.construction_seed = construction_seed
         self.reliabilities = tuple(
-            bhattacharyya_bounds_bsc(block_length, crossover_probability)
+            sampled_bhattacharyya_parameters_bsc(
+                block_length=block_length,
+                crossover_probability=crossover_probability,
+                samples=construction_samples,
+                seed=construction_seed,
+            )
         )
         self.info_set = select_information_bits(
             block_length=block_length,
             message_length=message_length,
             crossover_probability=crossover_probability,
+            samples=construction_samples,
+            seed=construction_seed,
         )
         info_set_lookup = set(self.info_set)
         self.frozen_set = tuple(

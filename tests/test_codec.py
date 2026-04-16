@@ -23,6 +23,12 @@ class PolarCodeTestCase(unittest.TestCase):
         self.assertEqual(len(codec.info_set), 7)
         self.assertEqual(len(set(codec.info_set)), 7)
 
+    def test_construction_is_repeatable_with_default_seed(self) -> None:
+        first = PolarCode(block_length=16, message_length=7, crossover_probability=0.1)
+        second = PolarCode(block_length=16, message_length=7, crossover_probability=0.1)
+        self.assertEqual(first.info_set, second.info_set)
+        self.assertEqual(first.reliabilities, second.reliabilities)
+
     def test_noise_free_round_trip_for_multiple_lengths(self) -> None:
         configurations = [
             (4, 2, 0.11),
